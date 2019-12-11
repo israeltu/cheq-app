@@ -1,64 +1,73 @@
-const Sequelize =require ("sequelize");
-const db=require('../dao/db');
+const Sequelize = require("sequelize");
+const db = require("../dao/db");
 
-
-module.exports =db.sequelize.define(
-    'keywordlist',{
-        id:{
-            type: Sequelize.INTEGER(11),primaryKey: true,
-            autoIncrement:true,allowNull: false
-        },
-        user_id:{
-            type: Sequelize.INTEGER(11),allowNull: true,
-            defaultValue:null
-        },
-        name:{
-            type: Sequelize.STRING(45),allowNull: true,
-            defaultValue:null
-        },
-        description:{
-            type: Sequelize.STRING(500),allowNull: true,
-            defaultValue:null
-        },
-        keywords:{
-            type: Sequelize.JSON,allowNull: true,
-            defaultValue:null
-        },
-        number_of_keywords:{
-            type: Sequelize.INTEGER(11),
-            allowNull: false
-        },
-        language:{
-            type: Sequelize.STRING(45),allowNull: true,
-            defaultValue:null
-        },
-        number_of_keywords:{
-            type: Sequelize.INTEGER(11),allowNull: false,
-            defaultValue:null
-        },
-        is_private:{
-            type: Sequelize.INTEGER(11),
-            allowNull: true,defaultValue: 0
-        },
-        last_modified: {type:Sequelize.DATE,defaultValue: Sequelize.NOW,
-                       allowNull: true
-        },
-        origin_keywords:{
-            type: Sequelize.JSON,allowNull: true,
-            defaultValue:null
-        },
-        version:{
-            type: Sequelize.STRING(45),allowNull: false,
-            defaultValue:0
-        },
-        origin_version:{
-            type: Sequelize.STRING(45),allowNull: false,
-            defaultValue:0
-        }
-    },{timestamps: false}
-
+module.exports = db.sequelize.define(
+  "keywordlist",
+  {
+    id: {
+      type: Sequelize.INTEGER(11),
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
+    user_id: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      defaultValue: null
+    },
+    name: {
+      type: Sequelize.STRING(45),
+      allowNull: true,
+      defaultValue: null
+    },
+    description: {
+      type: Sequelize.STRING(500),
+      allowNull: true,
+      defaultValue: null
+    },
+    keywords: {
+      type: Sequelize.JSON,
+      allowNull: true,
+      defaultValue: null
+    },
+    number_of_keywords: {
+      type: Sequelize.INTEGER(11),
+      allowNull: false,
+      defaultValue: null
+    },
+    language: {
+      type: Sequelize.STRING(45),
+      allowNull: true,
+      defaultValue: null
+    },
+    is_private: {
+      type: Sequelize.INTEGER(11),
+      allowNull: true,
+      defaultValue: 0
+    },
+    last_modified: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      allowNull: true
+    },
+    origin_keywords: {
+      type: Sequelize.JSON,
+      allowNull: true,
+      defaultValue: null
+    },
+    version: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+      defaultValue: 0
+    },
+    origin_version: {
+      type: Sequelize.STRING(45),
+      allowNull: false,
+      defaultValue: 0
+    }
+  },
+  { timestamps: false }
 );
-
 
 //Table structure
 /*
