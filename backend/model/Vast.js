@@ -1,103 +1,133 @@
-const Sequelize =require ("sequelize");
-const db=require('../dao/db');
+const Sequelize = require("sequelize");
+const db = require("../dao/db");
 
-module.exports =db.sequelize.define(
-    'vast',{
-        id:{
-            type: Sequelize.INTEGER(10),primaryKey: true,
-            autoIncrement:true,allowNull: false
-        },
-        name:{
-            type: Sequelize.STRING(200),allowNull: false,
-            defaultValue:null
-        },
-        date_created: {type:Sequelize.DATE,defaultValue: Sequelize.NOW,
-            allowNull: false
-        },
+module.exports = db.sequelize.define(
+  "vast",
+  {
+    id: {
+      type: Sequelize.INTEGER(10),
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
+    name: {
+      type: Sequelize.STRING(200),
+      allowNull: false,
+      defaultValue: null
+    },
+    date_created: {
+      type: Sequelize.DATE,
+      defaultValue: Sequelize.NOW,
+      allowNull: false
+    },
 
-        description:{
-            type: Sequelize.STRING(200),allowNull: true,
-            defaultValue:null
-        },
-        active:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        continue_on_click:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        language:{
-            type: Sequelize.STRING(3),allowNull: true,
-            defaultValue:"eng"
-        },
-        hide_timer:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        timer_location:{
-            type: Sequelize.STRING(13),allowNull: true,
-            defaultValue:"bottom"
-        },
-        skip_button_location:{
-            type: Sequelize.STRING(13),allowNull: true,
-            defaultValue:"middle_right"
-        },
-        hide_all_ui:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        hide_play_button:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        hide_skip_button:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        frud:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        brand_safety:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:0
-        },
-        network_id:{
-            type: Sequelize.INTEGER(10),
-            allowNull: false,defaultValue:null
-        },
-        ad_tag_url:{ type:Sequelize.STRING(500),allowNull: true,
-        defaultValue:null
-         },
-        width:{
-            type: Sequelize.INTEGER(6),allowNull: false,
-            defaultValue:null
-        },
-        height:{
-            type: Sequelize.INTEGER(6),allowNull: false,
-            defaultValue:null
-        },
-        duration:{
-            type: Sequelize.INTEGER(6),allowNull: false,
-            defaultValue:null
-        },
-        whitelist_keywords:{ type:Sequelize.STRING(600),allowNull: true,
-            defaultValue:null
-        },
-        serve_on_unmeasurable:{
-                type: Sequelize.BOOLEAN,allowNull: false,
-                defaultValue:1
-        },
-        is_branded:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:1
-        },
-        private_brand_safety:{
-            type: Sequelize.BOOLEAN,allowNull: true,
-            defaultValue:1
-        }
-    },{timestamps: false}
+    description: {
+      type: Sequelize.STRING(200),
+      allowNull: true,
+      defaultValue: null
+    },
+    active: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    continue_on_click: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    language: {
+      type: Sequelize.STRING(3),
+      allowNull: true,
+      defaultValue: "eng"
+    },
+    hide_timer: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    timer_location: {
+      type: Sequelize.STRING(13),
+      allowNull: true,
+      defaultValue: "bottom"
+    },
+    skip_button_location: {
+      type: Sequelize.STRING(13),
+      allowNull: true,
+      defaultValue: "middle_right"
+    },
+    hide_all_ui: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    hide_play_button: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    hide_skip_button: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    fraud: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    brand_safety: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 0
+    },
+    network_id: {
+      type: Sequelize.INTEGER(10),
+      allowNull: false,
+      defaultValue: null
+    },
+    ad_tag_url: {
+      type: Sequelize.STRING(500),
+      allowNull: true,
+      defaultValue: null
+    },
+    width: {
+      type: Sequelize.INTEGER(6),
+      allowNull: false,
+      defaultValue: null
+    },
+    height: {
+      type: Sequelize.INTEGER(6),
+      allowNull: false,
+      defaultValue: null
+    },
+    duration: {
+      type: Sequelize.INTEGER(6),
+      allowNull: false,
+      defaultValue: null
+    },
+    whitelist_keywords: {
+      type: Sequelize.STRING(600),
+      allowNull: true,
+      defaultValue: null
+    },
+    serve_on_unmeasurable: {
+      type: Sequelize.BOOLEAN,
+      allowNull: false,
+      defaultValue: 1
+    },
+    is_branded: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 1
+    },
+    private_brand_safety: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: 1
+    }
+  },
+  { timestamps: false }
 );
 
 //Table structure

@@ -48,19 +48,15 @@ class Login extends Component {
 
   onSubmit = e => {
     e.preventDefault();
-    if (this.state.password === this.state.reEnterPassword) {
-      const user = {
-        email: this.state.email,
-        password: this.state.password
-      };
-      console.log(user);
-      axios
-        .post("http://localhost:3000/api/users/login", user)
-        .then(res => console.log(res.data));
-      window.location = "/";
-    } else {
-      alert("passwords are not identical");
-    }
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    console.log(user);
+    axios
+      .post("http://localhost:3000/api/users/login", user)
+      .then(res => console.log(res.data));
+    window.location = "/";
   };
 }
 

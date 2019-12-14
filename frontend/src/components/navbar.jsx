@@ -5,8 +5,13 @@ class Navbar extends Component {
   render() {
     return (
       <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
-        <Link to="/" className="navbar-brand">
-          CHEQ-APP
+        <Link to="" className="navbar-brand">
+          <img
+            src={require("../resources/logo.png")}
+            alt=""
+            height="50"
+            width="150"
+          />
         </Link>
         <div className="collpase navbar-collapse">
           <ul className="navbar-nav mr-auto">

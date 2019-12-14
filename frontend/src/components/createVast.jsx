@@ -68,7 +68,6 @@ class CreateVast extends Component {
             <label>Acitve?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.active}
               onChange={this.onChangeActive}
@@ -78,7 +77,6 @@ class CreateVast extends Component {
             <label>Continue on click?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               cheked={this.state.continueOnClick}
               onChange={this.onChangeContinueOnClick}
@@ -98,7 +96,6 @@ class CreateVast extends Component {
             <label>Hide Timer?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.hideTimer}
               onChange={this.onChangeHideTimer}
@@ -117,7 +114,7 @@ class CreateVast extends Component {
           <div className="form-group">
             <label>Skip Button- Location: </label>
             <input
-              type="test"
+              type="text"
               required
               className="form-control"
               value={this.state.skipButtonLocation}
@@ -128,7 +125,6 @@ class CreateVast extends Component {
             <label>Hide all UI?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.hideAllUi}
               onChange={this.onChangeHideAllUi}
@@ -138,7 +134,6 @@ class CreateVast extends Component {
             <label>Hide Play Button?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.hidePlayButton}
               onChange={this.onChangeHidePlayButton}
@@ -148,7 +143,6 @@ class CreateVast extends Component {
             <label>Hide Skip Button?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.hideSkipButton}
               onChange={this.onChangeHideSkipButton}
@@ -158,7 +152,6 @@ class CreateVast extends Component {
             <label>Fraud?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.fraud}
               onChange={this.onChangeFraud}
@@ -168,7 +161,6 @@ class CreateVast extends Component {
             <label>Brand Safety?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.brandSafety}
               onChange={this.onChangeBrandSafety}
@@ -238,7 +230,6 @@ class CreateVast extends Component {
             <label>Serve on unmeasurable?:</label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.serveOnUnmeasurable}
               onChange={this.onChangeServeOnUnmeasurable}
@@ -248,7 +239,6 @@ class CreateVast extends Component {
             <label>Is branded?:</label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.isBranded}
               onChange={this.onChangeIsBranded}
@@ -258,7 +248,6 @@ class CreateVast extends Component {
             <label>Private brand safety?:</label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.privateBrandSafety}
               onChange={this.onChangePrivateBrandSafety}
@@ -309,7 +298,7 @@ class CreateVast extends Component {
     this.setState({ timerLocation: e.target.value });
   };
   onChangeSkipButtonLocation = e => {
-    this.setState({ SkipButtonLocation: e.target.value });
+    this.setState({ skipButtonLocation: e.target.value });
   };
   onChangeHideAllUi = e => {
     this.state.hideAllUi
@@ -373,35 +362,35 @@ class CreateVast extends Component {
   onSubmit = e => {
     e.preventDefault();
     const vast = {
-      name: this.state.userId,
-      dateCreated: this.state.dateCreated,
+      name: this.state.name,
+      date_created: new Date(),
       description: this.state.description,
       active: this.state.active,
-      continueOnClick: this.state.continueOnClick,
+      continue_on_click: this.state.continueOnClick,
       language: this.state.language,
-      hideTimer: this.state.hideTimer,
-      timerLocation: this.state.timerLocation,
-      skipButtonLocation: this.state.skipButtonLocation,
-      hideAllUi: this.state.hideAllUi,
-      hidePlayButton: this.state.hidePlayButton,
-      hideSkipButton: this.state.skipButtonLocation,
+      hide_timer: this.state.hideTimer,
+      timer_location: this.state.timerLocation,
+      skip_button_location: this.state.skipButtonLocation,
+      hide_all_ui: this.state.hideAllUi,
+      hide_play_button: this.state.hidePlayButton,
+      hide_skip_button: this.state.hideSkipButton,
       fraud: this.state.fraud,
-      brandSafety: this.state.brandSafety,
-      networkId: this.state.networkId,
-      adTagUrl: this.state.adTagUrl,
+      brand_safety: this.state.brandSafety,
+      network_id: this.state.networkId,
+      ad_tag_url: this.state.adTagUrl,
       width: this.state.width,
       height: this.state.height,
       duration: this.state.duration,
-      whiteListKeywords: this.state.whiteListKeywords,
-      serveOnUnmeasurable: this.state.serveOnUnmeasurable,
-      isBranded: this.state.isBranded,
-      privateBrandSafety: this.state.privateBrandSafety
+      whitelist_keywords: this.state.whiteListKeywords,
+      serve_on_unmeasurable: this.state.serveOnUnmeasurable,
+      is_branded: this.state.isBranded,
+      private_brand_safety: this.state.privateBrandSafety
     };
     console.log(vast);
     axios
       .post("http://localhost:3000/api/vasts", vast)
       .then(res => console.log(res.data));
-    window.location = "/";
+    window.location = "/vasts";
   };
 }
 

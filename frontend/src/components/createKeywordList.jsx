@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { string } from "prop-types";
 
 class CreateKeywordList extends Component {
   state = {
@@ -12,7 +13,7 @@ class CreateKeywordList extends Component {
     isPrivate: false,
     lastModified: new Date(),
     originKeywords: {},
-    version: "",
+    version: 0,
     originVersion: 0
   };
   render() {
@@ -68,6 +69,7 @@ class CreateKeywordList extends Component {
               className="form-control"
               value={this.state.numberOfKeywords}
               onChange={this.onChangeNumberOfKeywords}
+              disabled
             />
           </div>
           <div className="form-group">
@@ -84,7 +86,6 @@ class CreateKeywordList extends Component {
             <label>Is private?: </label>
             <input
               type="checkbox"
-              required
               className="m-2"
               checked={this.state.isPrivate}
               onChange={this.onChangeIsPriavte}
@@ -156,6 +157,9 @@ class CreateKeywordList extends Component {
     this.setState({ description: e.target.value });
   };
   onChangeKeywords = e => {
+    this.setState({
+      numberOfKeywords: new String(e.target.value).split(",").length
+    });
     this.setState({ keywords: e.target.value });
   };
   onChangeNumberOfKeywords = e => {
@@ -184,41 +188,24 @@ class CreateKeywordList extends Component {
   onSubmit = e => {
     e.preventDefault();
     const keywordList = {
-      userId: this.state.userId,
+      user_id: this.state.userId,
       name: this.state.name,
       description: this.state.description,
-      keywords: this.state.keywords,
-      numberOfKeywords: this.state.numberOfKeywords,
+      keywords: JSON.parse(this.state.keywords),
+      number_of_keywords: this.state.numberOfKeywords,
       language: this.state.language,
-      isPrivate: this.state.isPrivate,
-      lastModified: this.state.lastModified,
-      originKeywords: this.state.originKeywords,
+      is_private: this.state.isPrivate,
+      last_modified: new Date(),
+      origin_keywords: JSON.parse(this.state.keywords),
       version: this.state.version,
-      originVersion: this.state.originVersion
+      origin_version: this.state.version
     };
     console.log(keywordList);
     axios
-      .post("http://localhost:3000/api/keywordlists")
+      .post("http://localhost:3000/api/keywordlists", keywordList)
       .then(res => console.log(res.data));
-    window.location = "/";
+    window.location = "/keywords";
   };
-
-  /*
-componentDidMount() {
-  axios.get('http://localhost:5000/users/')
-    .then(response => {
-      if (response.data.length > 0) {
-        this.setState({
-          users: response.data.map(user => user.username),
-          username: response.data[0].username
-        })
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-    })
-
-}*/
 }
 
 export default CreateKeywordList;
