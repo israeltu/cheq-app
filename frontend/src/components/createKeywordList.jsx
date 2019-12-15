@@ -62,7 +62,7 @@ class CreateKeywordList extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Keywords: </label>
+            <label>Keywords: (format => ["key1","key2",....]) </label>
             <input
               type="text"
               required
@@ -196,6 +196,11 @@ class CreateKeywordList extends Component {
     this.setState({ originVersion: e.target.value });
   };
   onSubmit = e => {
+    try {
+      JSON.parse(this.state.keywords);
+    } catch (e) {
+      alert(e); // error in the above string (in this case, yes)!
+    }
     e.preventDefault();
     const keywordList = {
       user_id: this.state.userId,

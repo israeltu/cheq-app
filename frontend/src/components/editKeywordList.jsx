@@ -72,7 +72,7 @@ class EditKeywordList extends Component {
             />
           </div>
           <div className="form-group">
-            <label>Keywords: </label>
+            <label>Keywords: (format => ["key1","key2",....]) </label>
             <input
               type="text"
               required
