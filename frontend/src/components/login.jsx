@@ -1,15 +1,25 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 class Login extends Component {
   state = {
     email: "",
-    password: ""
+    password: "",
+    serverMsg: ""
   };
+
+  setServerMsg = msg => {
+    this.setState({ serverMsg: msg });
+  };
+
   render() {
     return (
       <div>
         <h3>System Login</h3>
+        <p>
+          <div>{this.state.serverMsg}</div>
+        </p>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Email: </label>
@@ -18,6 +28,7 @@ class Login extends Component {
               required
               className="form-control"
               value={this.state.email}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               onChange={this.onChangeEmail}
             />
           </div>
@@ -36,6 +47,8 @@ class Login extends Component {
             <input type="submit" value="Login" className="btn btn-primary" />
           </div>
         </form>
+        Don't have an acccount?
+        <Link to="/register"> Sign up here</Link>
       </div>
     );
   }
@@ -55,8 +68,15 @@ class Login extends Component {
     console.log(user);
     axios
       .post("http://localhost:3000/api/users/login", user)
-      .then(res => console.log(res.data));
-    window.location = "/";
+      .then(res => {
+        localStorage.setItem("userAccessToken", res.data.accessToken);
+      })
+      .then(() => {
+        this.props.setAuthed(true);
+        this.props.setMessage("user connected");
+        this.props.history.push("/home");
+      })
+      .catch(error => this.setServerMsg(error.response.data));
   };
 }
 

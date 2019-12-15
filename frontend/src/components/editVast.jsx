@@ -26,13 +26,21 @@ class EditVast extends Component {
     whiteListKeywords: "",
     serveOnUnmeasurable: false,
     isBranded: false,
-    privateBrandSafety: false
+    privateBrandSafety: false,
+    serverMsg: ""
+  };
+
+  setServerMsg = msg => {
+    this.setState({ serverMsg: msg });
   };
 
   render() {
     return (
       <div>
         <h3>Edit Vast</h3>
+        <p>
+          <div>{this.state.serverMsg}</div>
+        </p>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Id: </label>
@@ -402,15 +410,24 @@ class EditVast extends Component {
     axios
       .put(
         "http://localhost:3000/api/vasts/" + this.props.match.params.id,
-        vast
+        vast,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+          }
+        }
       )
-      .then(res => console.log(res.data));
-    window.location = "/vasts";
+      .then(() => this.props.history.push("/vasts"))
+      .catch(error => this.setServerMsg(error.response.data));
   };
 
   componentDidMount() {
     axios
-      .get("http://localhost:3000/api/vasts/" + this.props.match.params.id)
+      .get("http://localhost:3000/api/vasts/" + this.props.match.params.id, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+        }
+      })
       .then(response => {
         this.setState({
           id: response.data.id,
@@ -440,9 +457,7 @@ class EditVast extends Component {
         });
         console.log(response.data);
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => this.setServerMsg(error.response.data));
   }
 }
 

@@ -14,12 +14,13 @@ module.exports = db.sequelize.define(
       allowNull: false
     },
     password: {
-      type: Sequelize.INTEGER,
+      type: Sequelize.STRING,
       allowNull: false
     },
-    token: {
-      type: Sequelize.TEXT,
-      allowNull: true
+    isLoggedIn: {
+      type: Sequelize.BOOLEAN,
+      allowNull: true,
+      defaultValue: false
     }
   },
   { timestamps: false }

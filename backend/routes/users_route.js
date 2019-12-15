@@ -3,78 +3,111 @@ const users = express.Router();
 const User = require("../model/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const crypto = require("crypto");
+require("dotenv").config();
 
 //Register user
-users.post("/register", async (req, res) => {
-  const user = User.findOne({ where: { email: req.body.email } });
-  if (user) return res.sendStatus(400).send("email alredy exist");
-  try {
-    const hashedPassword = await bcrypt.hash(req.body.password, 10); //adding salt
-    const user = {
-      email: req.body.email,
-      password: hashedPassword,
-      token: null
-    };
-    User.create(user).then(() => res.status(200));
-  } catch {
-    res.status(500);
-  }
+users.post("/register", (req, res) => {
+  User.findOne({ where: { email: req.body.email } })
+    .then(async user => {
+      if (user)
+        return res
+          .status(400)
+          .send(
+            "Registration failed: Email already exists on the system, please use a different email"
+          );
+      else {
+        try {
+          const hashedPassword = await bcrypt.hash(req.body.password, 10); //adding salt
+          const newUser = {
+            email: req.body.email,
+            password: hashedPassword,
+            idLoggedIn: false
+          };
+          User.create(newUser).then(() =>
+            res.status(200).send("Registration completed succesfully")
+          );
+        } catch {
+          res.status(500);
+        }
+      }
+    })
+    .catch(() => res.status(400));
 });
 
 //User login
-users.post("/login", async (req, res) => {
+users.post("/login", (req, res) => {
   //User Authentication
-  const user = User.findOne({ where: { email: req.body.email } });
-  if (!user)
-    return res.status(400).send("wrong email address or email does not exist");
-  try {
-    if (await bcrypt.compare(req.body.password, user.password)) {
-      res.send("Success");
-    } else {
-      res.send("Wrong password");
-    }
-  } catch {
-    res.status(500);
-  }
-
-  //JWT-generate user access token
-  generatedToekn = generateToken(); //indvidual token for per user per login
-  const accessToken = jwt.sign(user, generateSecretAccessToken());
-  user.token = accessToken;
-  User.update(user, { where: { id: user.id } }); //update database with user's token
-  res.json({ accessToken: accessToken });
+  User.findOne({ where: { email: req.body.email } })
+    .then(async user => {
+      if (!user)
+        return res
+          .status(400)
+          .send("wrong email address or email does not exist");
+      try {
+        if (await bcrypt.compare(req.body.password, user.password)) {
+          console.log("password ok");
+          const tempUser = {
+            email: user.email,
+            password: user.password,
+            isLoggedIn: true
+          };
+          console.log(user.dataValues);
+          //JWT-generate user access token
+          const accessToken = jwt.sign(
+            { email: req.body.email, id: user.id },
+            process.env.ACCESS_TOKEN_SECRET
+          );
+          User.update(tempUser, { where: { id: user.id } }).then(
+            rowsUpdated => {
+              if (rowsUpdated) {
+                console.log(accessToken);
+                return res.json({ accessToken: accessToken });
+              } //send JWT to the user
+            }
+          );
+        } else {
+          res.status(401).send("Wrong password");
+        }
+      } catch {
+        res.status(500);
+      }
+    })
+    .catch(() => res.status(400));
 });
 
 //User logout
-users.delete("/logout", (req, res) => {
+users.delete("/logout", authenticateToken, (req, res) => {
+  console.log(req);
   User.findOne({ where: { email: req.body.email } })
     .then(user => {
-      user.token = "";
-      return user;
+      const tempUser = {
+        email: user.email,
+        password: user.password,
+        isLoggedIn: false
+      };
+      console.log("here");
+      User.update(tempUser, { where: { email: req.body.email } }).then(
+        rowsUpdated => {
+          if (rowsUpdated) return res.status(200).send("Logout successfully");
+        }
+      );
     })
-    .then(user =>
-      User.update(user, { where: { email: req.body.email } }).then(
-        res.sendStatus(204)
-      )
-    );
+    .catch(() => res.status(400));
 });
 
 //middleware
 function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const reqToken = authHeader && authHeader.split(" ")[1]; //check if token attached to header
-  if (!reqToken) return res.sendStatus(401); //no access-token is missing
-  const { token } = User.findOne({ where: { email: req.body.email } });
-  jwt.verify(reqToken, token, (err, user) => {
-    if (err) return res.sendStatus(403); //no access-token is not invalid
-    req.user = user;
-    next();
+  if (!reqToken) return res.status(401).send("no access-token is missing"); //no access-token is missing
+  jwt.verify(reqToken, process.env.ACCESS_TOKEN_SECRET, (err, { email }) => {
+    if (err) return res.status(403).send("no access-token is invalid");
+    //no access-token is invalid
+    else {
+      req.body.email = email;
+      next();
+    }
   });
-}
-
-function generateSecretAccessToken() {
-  return crypto.randomBytes(64).toString("hex");
 }
 
 module.exports.users = users;

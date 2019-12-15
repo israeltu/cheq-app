@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import axios from "axios";
-import { string } from "prop-types";
+import jwt_decode from "jwt-decode";
 
 class CreateKeywordList extends Component {
   state = {
-    userId: 0,
+    userId: jwt_decode(localStorage.getItem("userAccessToken")).id,
     name: "",
     description: "",
     keywords: {},
@@ -14,12 +14,21 @@ class CreateKeywordList extends Component {
     lastModified: new Date(),
     originKeywords: {},
     version: 0,
-    originVersion: 0
+    originVersion: 0,
+    serverMsg: ""
   };
+  setServerMsg = msg => {
+    this.setState({ serverMsg: msg });
+  };
+
   render() {
+    console.log();
     return (
       <div>
         <h3>Create new KeywordList</h3>
+        <p>
+          <div>{this.state.serverMsg}</div>
+        </p>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>User Id: </label>
@@ -29,6 +38,7 @@ class CreateKeywordList extends Component {
               className="form-control"
               value={this.state.userId}
               onChange={this.onChangeUserId}
+              disabled
             />
           </div>
           <div className="form-group">
@@ -158,7 +168,7 @@ class CreateKeywordList extends Component {
   };
   onChangeKeywords = e => {
     this.setState({
-      numberOfKeywords: new String(e.target.value).split(",").length
+      numberOfKeywords: !e.target.value ? 0 : e.target.value.split(",").length
     });
     this.setState({ keywords: e.target.value });
   };
@@ -201,10 +211,16 @@ class CreateKeywordList extends Component {
       origin_version: this.state.version
     };
     console.log(keywordList);
-    axios
-      .post("http://localhost:3000/api/keywordlists", keywordList)
-      .then(res => console.log(res.data));
-    window.location = "/keywords";
+    axios({
+      method: "post",
+      url: "http://localhost:3000/api/keywordlists",
+      data: keywordList,
+      headrs: {
+        Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+      }
+    })
+      .then(() => this.props.history.push("/keywords"))
+      .catch(error => this.setServerMsg(error.response.data));
   };
 }
 

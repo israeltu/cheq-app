@@ -4,12 +4,12 @@ const { authenticateToken } = require("../routes/users_route");
 const Vast = require("../model/Vast");
 
 //Get_all vasts
-vasts.get("", (req, res) => {
+vasts.get("", authenticateToken, (req, res) => {
   Vast.findAll().then(v => res.json(v));
 });
 
 //Get keywordlist
-vasts.get("/:id", (req, res) => {
+vasts.get("/:id", authenticateToken, (req, res) => {
   Vast.findByPk(req.params.id)
     .then(v => {
       v
@@ -24,7 +24,7 @@ vasts.get("/:id", (req, res) => {
 });
 
 //Create vast
-vasts.post("", (req, res) => {
+vasts.post("", authenticateToken, (req, res) => {
   Vast.create(req.body)
     .then(v => res.json(v))
     .catch(({ errors }) => {
@@ -35,7 +35,7 @@ vasts.post("", (req, res) => {
 });
 
 //Update vast
-vasts.put("/:id", (req, res) => {
+vasts.put("/:id", authenticateToken, (req, res) => {
   console.log(req.body);
   Vast.update(req.body, { where: { id: req.params.id } })
     .then(rowsUpdate => {
@@ -51,7 +51,7 @@ vasts.put("/:id", (req, res) => {
 });
 
 //delete vast
-vasts.delete("/:id", (req, res) => {
+vasts.delete("/:id", authenticateToken, (req, res) => {
   Vast.destroy({ where: { id: req.params.id } })
     .then(rowsDeleted => {
       if (rowsDeleted == 0)

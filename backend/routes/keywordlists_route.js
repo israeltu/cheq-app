@@ -4,12 +4,12 @@ const { authenticateToken } = require("../routes/users_route");
 const KeywordList = require("../model/Keywordlist");
 
 //Get_all keywordlists
-keywordlists.get("", (req, res) => {
+keywordlists.get("", authenticateToken, (req, res) => {
   KeywordList.findAll().then(k => res.json(k));
 });
 
 //Get keywordlist
-keywordlists.get("/:id", (req, res) => {
+keywordlists.get("/:id", authenticateToken, (req, res) => {
   KeywordList.findByPk(req.params.id)
     .then(k => {
       k
@@ -24,7 +24,7 @@ keywordlists.get("/:id", (req, res) => {
 });
 
 //Create keywordlist
-keywordlists.post("", (req, res) => {
+keywordlists.post("", authenticateToken, (req, res) => {
   console.log(req.body);
   KeywordList.create(req.body)
     .then(k => res.json(k))
@@ -37,7 +37,7 @@ keywordlists.post("", (req, res) => {
 });
 
 //Update keywordlist
-keywordlists.put("/:id", (req, res) => {
+keywordlists.put("/:id", authenticateToken, (req, res) => {
   KeywordList.update(req.body, { where: { id: req.params.id } })
     .then(rowsUpdate => {
       if (rowsUpdate == 0)
@@ -54,7 +54,7 @@ keywordlists.put("/:id", (req, res) => {
 });
 
 //delete keywordlist
-keywordlists.delete("/:id", (req, res) => {
+keywordlists.delete("/:id", authenticateToken, (req, res) => {
   KeywordList.destroy({ where: { id: req.params.id } })
     .then(rowsDeleted => {
       if (rowsDeleted == 0)

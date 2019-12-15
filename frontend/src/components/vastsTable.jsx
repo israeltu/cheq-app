@@ -9,7 +9,11 @@ class VastsTable extends Component {
   };
   componentDidMount() {
     axios
-      .get("http://localhost:3000/api/vasts")
+      .get("http://localhost:3000/api/vasts", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+        }
+      })
       .then(res => {
         console.log(res.data[1]);
         this.setState({ vasts: res.data });
@@ -19,7 +23,11 @@ class VastsTable extends Component {
 
   OnDeleteVast = id => {
     axios
-      .delete("http://localhost:3000/api/vasts/" + id)
+      .delete("http://localhost:3000/api/vasts/" + id, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+        }
+      })
       .then(res => console.log(res));
 
     this.setState({

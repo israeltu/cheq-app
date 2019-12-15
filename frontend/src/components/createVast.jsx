@@ -25,13 +25,21 @@ class CreateVast extends Component {
     whiteListKeywords: "",
     serveOnUnmeasurable: false,
     isBranded: false,
-    privateBrandSafety: false
+    privateBrandSafety: false,
+    serverMsg: ""
+  };
+
+  setServerMsg = msg => {
+    this.setState({ serverMsg: msg });
   };
 
   render() {
     return (
       <div>
         <h3>Create new Vast</h3>
+        <p>
+          <div>{this.state.serverMsg}</div>
+        </p>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Name: </label>
@@ -386,11 +394,15 @@ class CreateVast extends Component {
       is_branded: this.state.isBranded,
       private_brand_safety: this.state.privateBrandSafety
     };
-    console.log(vast);
+
     axios
-      .post("http://localhost:3000/api/vasts", vast)
-      .then(res => console.log(res.data));
-    window.location = "/vasts";
+      .post("http://localhost:3000/api/vasts", vast, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+        }
+      })
+      .then(() => this.props.history.push("/vasts"))
+      .catch(error => this.setServerMsg(error.response.data));
   };
 }
 

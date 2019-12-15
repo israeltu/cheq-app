@@ -8,11 +8,15 @@ class KeywordListTable extends Component {
     keywordLists: [],
     name: "keywords"
   };
+
   componentDidMount() {
     axios
-      .get("http://localhost:3000/api/keywordlists")
+      .get("http://localhost:3000/api/keywordlists", {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+        }
+      })
       .then(res => {
-        console.log(res.data[1]);
         this.setState({ keywordLists: res.data });
       })
       .catch(err => console.log(err));
@@ -20,7 +24,11 @@ class KeywordListTable extends Component {
 
   OnDeleteKeywordList = id => {
     axios
-      .delete("http://localhost:3000/api/keywordlists/" + id)
+      .delete("http://localhost:3000/api/keywordlists/" + id, {
+        headers: {
+          Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+        }
+      })
       .then(res => console.log(res));
 
     this.setState({

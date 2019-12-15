@@ -34,4 +34,4 @@ db.sequelize
 //create tables if thet don't exist
 //KeywordList.sync({force:false});
 //Vast.sync({force:false});
-//User.sync({force:false});
+User.sync({ force: false });

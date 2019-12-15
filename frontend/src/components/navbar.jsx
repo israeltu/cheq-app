@@ -1,11 +1,36 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 class Navbar extends Component {
+  logOut = () => {
+    if (this.props.isAuthed) {
+      axios
+        .delete("http://localhost:3000/api/users/logout", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+          }
+        })
+        .then(res => {
+          localStorage.removeItem("userAccessToken");
+          console.log("user logout");
+        })
+        .then(() => {
+          this.props.setAuthed(false);
+          this.props.setMessage("Welcome please login");
+          window.location = "/home";
+        })
+        .catch();
+    } else {
+      this.props.setMessage("Welcome please login");
+      window.location = "/home";
+    }
+  };
+
   render() {
     return (
       <nav className="navbar navbar-dark bg-dark navbar-expand-lg">
-        <Link to="" className="navbar-brand">
+        <Link to={"/home"} className="navbar-brand">
           <img
             src={require("../resources/logo.png")}
             alt=""
@@ -32,13 +57,13 @@ class Navbar extends Component {
             </li>
             <li className="navbar-item">
               <Link to="/register" className="nav-link">
-                Register
+                Sign up
               </Link>
             </li>
             <li className="navbar-item">
-              <Link to="/logout" className="nav-link">
+              <a href="#" onClick={this.logOut} className="nav-link">
                 Logout
-              </Link>
+              </a>
             </li>
           </ul>
         </div>

@@ -7,12 +7,20 @@ class Register extends Component {
     email: "",
     password: "",
     token: "",
-    reEnterPassword: ""
+    reEnterPassword: "",
+    serverMsg: ""
+  };
+
+  setServerMsg = msg => {
+    this.setState({ serverMsg: msg });
   };
   render() {
     return (
       <div>
         <h3>Please Insert Your Details</h3>
+        <p>
+          <div>{this.state.serverMsg}</div>
+        </p>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Email: </label>
@@ -21,6 +29,7 @@ class Register extends Component {
               required
               className="form-control"
               value={this.state.email}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
               onChange={this.onChangeEmail}
             />
           </div>
@@ -69,11 +78,13 @@ class Register extends Component {
         email: this.state.email,
         password: this.state.password
       };
-      console.log(user);
       axios
         .post("http://localhost:3000/api/users/register", user)
-        .then(res => console.log(res.data));
-      window.location = "/";
+        .then(response => {
+          //this.setServerMsg(response.data);
+          this.props.history.push("/keywords");
+        })
+        .catch(error => this.setServerMsg(error.response.data));
     } else {
       alert("passwords are not identical");
     }

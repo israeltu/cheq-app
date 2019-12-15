@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 class EditKeywordList extends Component {
   state = {
@@ -14,12 +15,20 @@ class EditKeywordList extends Component {
     lastModified: new Date(),
     originKeywords: {},
     version: "",
-    originVersion: 0
+    originVersion: 0,
+    serverMsg: ""
   };
+  setServerMsg = msg => {
+    this.setState({ serverMsg: msg });
+  };
+
   render() {
     return (
       <div>
         <h3>Edit KeywordList</h3>
+        <p>
+          <div>{this.state.serverMsg}</div>
+        </p>
         <form onSubmit={this.onSubmit}>
           <div className="form-group">
             <label>Id: </label>
@@ -39,6 +48,7 @@ class EditKeywordList extends Component {
               className="form-control"
               value={this.state.userId}
               onChange={this.onChangeUserId}
+              disabled
             />
           </div>
           <div className="form-group">
@@ -168,7 +178,7 @@ class EditKeywordList extends Component {
   };
   onChangeKeywords = e => {
     this.setState({
-      numberOfKeywords: new String(e.target.value).split(",").length
+      numberOfKeywords: !e.target.value ? 0 : e.target.value.split(",").length
     });
     this.setState({ keywords: e.target.value });
   };
@@ -196,9 +206,15 @@ class EditKeywordList extends Component {
     this.setState({ originVersion: e.target.value });
   };
   onSubmit = e => {
+    try {
+      JSON.parse(this.state.keywords);
+    } catch (e) {
+      alert(e); // error in the above string (in this case, yes)!
+    }
+
     e.preventDefault();
     const keywordList = {
-      user_id: this.state.userId,
+      user_id: jwt_decode(localStorage.getItem("userAccessToken")).id,
       name: this.state.name,
       description: this.state.description,
       keywords: JSON.parse(this.state.keywords),
@@ -214,16 +230,26 @@ class EditKeywordList extends Component {
     axios
       .put(
         "http://localhost:3000/api/keywordlists/" + this.props.match.params.id,
-        keywordList
+        keywordList,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+          }
+        }
       )
-      .then(res => console.log(res.data));
-    window.location = "/keywords";
+      .then(() => this.props.history.push("/keywords"))
+      .catch(error => this.setServerMsg(error.response.data));
   };
 
   componentDidMount() {
     axios
       .get(
-        "http://localhost:3000/api/keywordlists/" + this.props.match.params.id
+        "http://localhost:3000/api/keywordlists/" + this.props.match.params.id,
+        {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("userAccessToken")
+          }
+        }
       )
       .then(response => {
         this.setState({
@@ -241,9 +267,7 @@ class EditKeywordList extends Component {
           originVersion: response.data.version
         });
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => this.setServerMsg(error.response.data));
   }
 }
 
