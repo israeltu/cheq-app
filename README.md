@@ -1,5 +1,5 @@
 # cheq-app
-Full Stack web app: NodeJS(Express)+MySQL+ReactJS 
+Full Stack web app: NodeJS(Express) + MySQL 8.0.18 + ReactJS 
 
 About the app:
 •	With supplying unique credentials, user can register & login (and logout) to the system.
